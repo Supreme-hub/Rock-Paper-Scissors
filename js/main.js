@@ -1,3 +1,18 @@
+const r = document.querySelector('#r');
+const p = document.querySelector('#p');
+const s = document.querySelector('#s');
+const div = document.querySelector('#result');
+const cwinDOM = document.querySelector('#cwin');
+const hwinDOM = document.querySelector('#hwin');
+const final = document.querySelector('#final');
+let cwin = 0;
+let hwin = 0;
+
+const resultDOM = document.createElement('h1');
+resultDOM.setAttribute('id','rel');
+div.appendChild(resultDOM);
+const rel = document.querySelector('#rel');
+
 function computerPlay() {
     let ran = Math.floor(Math.random() * 3 + 1);
     switch(ran) {
@@ -41,33 +56,49 @@ function playRound(playerSelection, computerSelection) {
     return win;
 }
 
-function game() {
-    let Hwin = 0;
-    let Cwin = 0;
-    for (let i = 0; i < 5; i++) {
-        let computerSelection = computerPlay();
-        let playerSelection = prompt('What will you Play');
-        let tmp = playRound(playerSelection, computerSelection);
-        if (tmp === "Tie") {
-            alert(`It's a Tie`);
-            i--;
-        }
-        else if (tmp) {
-            alert(`You Won! ${playerSelection} beats ${computerSelection}`);
-            Hwin++;
-        }
-        else if (!tmp){
-            alert(`You Lost! ${playerSelection} beats ${computerSelection}`);
-            Cwin++;
-        }
+function result(win, playerSelection, computerSelection) {
+    let result = "";
+    if (hwin === 5) {
+        final.innerText = "You Won the whole Game!";
+        return;
     }
-    if (Hwin > Cwin) {
-        return "You Won";
+    else if (cwin === 5) {
+        final.innerHTML = "You lost the whole Game!";
+        return;
+    }
+    if (win === true) {
+        hwin++;
+        result = "won";
+    }
+    else if (win === false) {
+        cwin++;
+        result = "lost";
     }
     else {
-        return "You Lost"
+        rel.innerText = `It's a tie`;
+        return;
     }
+    rel.innerText = `You ${result}`;
+    hwinDOM.innerText = `${hwin}`;
+    cwinDOM.innerText = `${cwin}`;
+
 }
 
-alert("Let's Play Rock Paper Scissors")
-alert(game());
+r.addEventListener('click', () => {
+    let computerSelection = computerPlay();
+    let playerSelection = 'rock';
+    let win = playRound(playerSelection, computerSelection);
+    result(win, playerSelection, computerSelection);
+} );
+p.addEventListener('click', () => {
+    let computerSelection = computerPlay();
+    let playerSelection = 'paper';
+    let win = playRound(playerSelection, computerSelection);
+    result(win, playerSelection, computerSelection);
+});
+s.addEventListener('click', () => {
+    let computerSelection = computerPlay();
+    let playerSelection = 'scissors';
+    let win = playRound(playerSelection, computerSelection);
+    result(win, playerSelection, computerSelection);
+});
